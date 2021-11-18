@@ -55,8 +55,37 @@ app.get('/products/:productID', (req, res) => {
   let productID = req.params.productID
   //get DB record
 
-  getProduct(productID).then((result) => console.log('RUTRNED::::', result.name))
-  res.sendStatus(200)
+//   {
+//     "id": 1,
+//     "name": "Camo Onesie",
+//     "slogan": "Blend in to your crowd",
+//     "description": "The So Fatigues will wake you up and fit you in. This high energy camo will have you blending in to even the wildest surroundings.",
+//     "category": "Jackets",
+//     "default_price": "140"
+// },
+  getProduct(productID)
+  .then((result) => {
+    console.log('RUTRNED::::', result.name)
+    //format data,
+    let productData =
+    {
+      "id": result.id,
+      "name": result.name,
+      "slogan": result.slogan,
+      "description": result.description,
+      "category": result.category,
+      "default_price": result.default_price.toString()
+    }
+
+    res.status(200).send(productData)
+  })
+  .catch((reject) => {
+    console.log('Get product with ID error', reject)
+    res.sendStatus(500)
+  })
+
+
+  // res.sendStatus(200)
 
 })
 
