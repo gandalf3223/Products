@@ -1,32 +1,31 @@
+//id,productId,name,sale_price,original_price,default_style
 const { Sequelize, DataTypes } = require('sequelize');
 const {sequelize} = require('../db/index.js')
 
-const Product = sequelize.define('product', {
+const Style = sequelize.define('style', {
   id: {
     type: Sequelize.INTEGER,  //Sequelize.UUID
                               // UUID datatype for PostgreSQL and SQLite, CHAR(36) BINARY for MySQL (use defaultValue: Sequelize.UUIDV1 or Sequelize.UUIDV4 to make sequelize generate the ids automatically)
     primaryKey: true,
     autoIncrement: true,
   },
+  productId:{
+    type: Sequelize.INTEGER,
+  },
   name:{
-    type: Sequelize.STRING
-  },
-  slogan:{
     type: Sequelize.TEXT
   },
-  description: {
-    type: Sequelize.TEXT
+  sale_price: {
+    type: Sequelize.STRING,
+    allowNull: true,
   },
-  category: {
-    type: Sequelize.STRING
-  },
-  default_price:{
+  original_price: {
     type: Sequelize.INTEGER
   },
-
+  default_style:{
+    type: Sequelize.BOOLEAN
+  },
 }, { timestamps: false})
 
 
-module.exports.Product = Product;
-
-// id,name,slogan,description,category,default_price
+module.exports.Style = Style;
