@@ -26,7 +26,24 @@ const Product = sequelize.define('product', {
 
 }, { timestamps: false})
 
+//function for getting record from DB
+const getProduct = async function(productID) {
+
+  console.log(productID)
+  const product = await Product.findByPk(123);
+  if (product === null) {
+    console.log(`${productID} not found in DB`)
+  } else {
+    console.log(product instanceof Product);
+    console.log(product.name)
+    return product;
+  }
+  debugger;
+
+}
+
 
 module.exports.Product = Product;
+module.exports.getProduct = getProduct
 
 // id,name,slogan,description,category,default_price

@@ -4,7 +4,7 @@ const port = 3000;
 
 //Sequalize models
 const {sequelize} = require('./db/index.js')
-const {Product} = require('./models/products.js')
+const {Product, getProduct} = require('./models/products.js')
 const {Style} = require('./models/styles.js')
 const {Feature} = require('./models/features.js')
 const {Photo} = require('./models/photos.js')
@@ -53,8 +53,12 @@ app.listen(port, () => {
 app.get('/products/:productID', (req, res) => {
   // debugger;
   let productID = req.params.productID
-  res.sendStatus(200)
   //get DB record
+
+  getProduct(productID).then((result) => console.log('RUTRNED::::', result.name))
+  res.sendStatus(200)
+
 })
+
 
 
