@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
 const port = 3000;
-const {sequelize} = require('./db/index.js')
 
+//Sequalize models
+const {sequelize} = require('./db/index.js')
 const {Product} = require('./models/products.js')
 const {Style} = require('./models/styles.js')
 const {Feature} = require('./models/features.js')
@@ -10,6 +11,8 @@ const {Photo} = require('./models/photos.js')
 const {Sku} = require('./models/skus.js')
 const {Related} = require('./models/related.js')
 
+//middleware
+app.use(express.json());
 
 //TODO: Remove model imports, move to controller
 
@@ -45,6 +48,13 @@ app.get('/', (req, res) =>
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
+})
+//40344
+app.get('/products/:productID', (req, res) => {
+  // debugger;
+  let productID = req.params.productID
+  res.sendStatus(200)
+  //get DB record
 })
 
 
