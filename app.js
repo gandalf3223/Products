@@ -2,20 +2,24 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+const logger = require('pino')({
+  level: 'debug'
+})
 
 //Sequelize models
 const {sequelize} = require('./db/index.js')
 const {Product, getProduct, getProductList} = require('./models/products.js')
 const {Style} = require('./models/styles.js')
-const {Feature} = require('./models/features.js')
+const {Feature, getFeatures} = require('./models/features.js')
 const {Photo} = require('./models/photos.js')
 const {Sku} = require('./models/skus.js')
 const {Related} = require('./models/related.js')
 
+
 //middleware
 app.use(express.json());
 
-
+// Feature.sync()
 
 app.get('/', (req, res) =>
   res.send('Hello'))
@@ -25,15 +29,17 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-
-
+/*
+API to retrieve specific Product with Product ID
+*/
 app.get('/products/:productID', (req, res) => {
-
   let productID = req.params.productID
+  let productData = {};
+
   getProduct(productID)
   .then((result) => {
     //format Product data
-    let productData =
+    productData =
     {
       "id": result.id,
       "name": result.name,
@@ -42,16 +48,29 @@ app.get('/products/:productID', (req, res) => {
       "category": result.category,
       "default_price": result.default_price.toString()
     }
-    res.status(200).send(productData)
+
+    getFeatures(productID)
+      .then( (result) => {
+      // logger.debug(result)
+      productData.features = result;
+      res.status(200).send(productData)
+    })
+    .catch((reject) => {
+    logger.error(`Get feature with productID error: ${reject}`)
+    res.sendStatus(500)
+    })
+
   })
   .catch((reject) => {
-    console.log('Get product with ID error', reject)
+    logger.error(`Get Product info with productID error: ${reject}`)
     res.sendStatus(500)
   })
 })
 
-
-
+/*
+API to retrieve specific Products list,
+with possibly page and count queries within URL
+*/
 app.get('/products/', (req, res) => {
 
   //API default values for page and count
@@ -76,4 +95,3 @@ app.get('/products/', (req, res) => {
 
   })
 })
-
