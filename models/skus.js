@@ -42,7 +42,7 @@ const getSkusList = async function(StyleID) {
           quantity : record.dataValues.quantity
         }
       }
-      // logger.debug(skusList)
+
       skusList.push(skuItem)
       return skusList;
     }
