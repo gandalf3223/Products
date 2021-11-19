@@ -64,8 +64,8 @@ app.get('/products/:productID', (req, res) => {
   .catch((reject) => {
     logger.error(`Get Product info with productID error: ${reject}`)
     res.sendStatus(500)
-
-
+  })
+})
 
 /*
 API to retrieve specific Products list,
@@ -95,6 +95,3 @@ app.get('/products/', (req, res) => {
 
   })
 })
-
-//TODO
-// /products/:product_id/styles

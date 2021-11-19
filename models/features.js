@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes, Op } = require('sequelize');
+const { Sequelize, DataTypes} = require('sequelize');
 const {sequelize} = require('../db/index.js')
 const logger = require('pino')({
   level: 'debug'
@@ -27,20 +27,14 @@ const Feature = sequelize.define('feature', {
 const getFeatures = async function(productID){
   let featureRecords = await Feature.findAll({
     where: {
-    //   product_id: { //Can clen
-    //     [Op.eq]: productID
-    //  }
       product_id : productID
     }
   });
 
   if (featureRecords === null) {
-    // console.log(featureRecords)
     logger.error(featureRecords)
   } else {
-    // console.log(featureRecords)
     let featureList = []
-    // logger.info(featureRecords);
     for (let featureItem of featureRecords) {
       let featureInfoItem = {
         feature: featureItem.dataValues.feature,
@@ -48,10 +42,9 @@ const getFeatures = async function(productID){
       }
       featureList.push(featureInfoItem)
     }
-    logger.info(featureList)
+    logger.info(`Successfully retrieved Feature info from DB`)
     return featureList;
   }
-
 }
 
 module.exports.Feature = Feature;
