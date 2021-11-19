@@ -22,15 +22,18 @@ const Feature = sequelize.define('feature', {
   },
 }, { timestamps: false})
 
-const getFeatures = async function(productID){
 
+
+const getFeatures = async function(productID){
   let featureRecords = await Feature.findAll({
     where: {
-      product_id: {
-        [Op.eq]: 2
-     }
+    //   product_id: { //Can clen
+    //     [Op.eq]: productID
+    //  }
+      product_id : productID
     }
   });
+
   if (featureRecords === null) {
     // console.log(featureRecords)
     logger.error(featureRecords)
