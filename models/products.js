@@ -49,7 +49,7 @@ const getProductList = async function(page, count) {
   console.log(start)
 
   const productRecords = await Product.findAll({
-      offset: start  //Skip up till this point
+      offset: start,  //Skip up till this point
       limit: count,  //fetch after that
     }
   )
