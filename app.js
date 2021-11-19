@@ -2,9 +2,10 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-//Sequalize models
+
+//Sequelize models
 const {sequelize} = require('./db/index.js')
-const {Product, getProduct} = require('./models/products.js')
+const {Product, getProduct, getProductList} = require('./models/products.js')
 const {Style} = require('./models/styles.js')
 const {Feature} = require('./models/features.js')
 const {Photo} = require('./models/photos.js')
@@ -13,32 +14,6 @@ const {Related} = require('./models/related.js')
 
 //middleware
 app.use(express.json());
-
-//TODO: Remove model imports, move to controller
-
-////Testing sequelize//////
-//Create Table
-//Product.sync()
-
-//Create Record
-// Product.create({
-
-//     name: 'rfpname',
-//     slogan: 'testSlogan',
-//     description: 'testDesc',
-//     category: 'testCategory',
-//     default_price: 100
-//   })
-//   .then((resp) =>
-//   console.log(resp))
-//   .catch((err) =>
-//   console.log(err))
-
-
-// Product.findAll().then(products => {
-//   console.log('-----------------')
-//   console.log(products)
-// })
 
 
 
@@ -49,24 +24,15 @@ app.get('/', (req, res) =>
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
-//40344
-app.get('/products/:productID', (req, res) => {
-  // debugger;
-  let productID = req.params.productID
-  //get DB record
 
-//   {
-//     "id": 1,
-//     "name": "Camo Onesie",
-//     "slogan": "Blend in to your crowd",
-//     "description": "The So Fatigues will wake you up and fit you in. This high energy camo will have you blending in to even the wildest surroundings.",
-//     "category": "Jackets",
-//     "default_price": "140"
-// },
+
+
+app.get('/products/:productID', (req, res) => {
+
+  let productID = req.params.productID
   getProduct(productID)
   .then((result) => {
-    console.log('RUTRNED::::', result.name)
-    //format data,
+    //format Product data
     let productData =
     {
       "id": result.id,
@@ -76,18 +42,38 @@ app.get('/products/:productID', (req, res) => {
       "category": result.category,
       "default_price": result.default_price.toString()
     }
-
     res.status(200).send(productData)
   })
   .catch((reject) => {
     console.log('Get product with ID error', reject)
     res.sendStatus(500)
   })
-
-
-  // res.sendStatus(200)
-
 })
 
 
+
+app.get('/products/', (req, res) => {
+
+  //API default values for page and count
+  //if no query is in request URL string
+  let page = 1
+  let count = 5
+
+  if (req.query.page) {
+    page = parseInt(req.query.page);
+  }
+  if (req.query.count) {
+    count = parseInt(req.query.count);
+  }
+
+  getProductList(page, count)
+  .then( (result) => {
+    console.log('ProductList', result)
+    res.status(200).send(result)
+  })
+  .catch( (error) => {
+    res.status(500).send('Error getting product list')
+
+  })
+})
 
