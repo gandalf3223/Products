@@ -11,7 +11,7 @@ const {Product, getProduct, getProductList} = require('./models/products.js')
 const {Style} = require('./models/styles.js')
 const {Feature} = require('./models/features.js')
 const {Photo, getPhotosList} = require('./models/photos.js')
-const {Sku} = require('./models/skus.js')
+const {Sku, getSkusList} = require('./models/skus.js')
 const {Related} = require('./models/related.js')
 
 //middleware
@@ -82,12 +82,9 @@ app.get('/products/', (req, res) => {
 
 
 app.get('/products/:productID/styles', (req, res) => {
-  // debugger;
+
   let productID = req.params.productID;
-
   let testStyleID = 2 //Sample testing
-
-
 
 
   //Photo list for Styles API response
@@ -99,6 +96,14 @@ app.get('/products/:productID/styles', (req, res) => {
     logger.error(error)
   })
 
+  //Sku list for Styles API response
+  getSkusList(testStyleID)
+  .then( (result) => {
+    logger.debug(result)
+  })
+  .catch( (error) => {
+    logger.error(error)
+  })
 
   res.status(200).send('STYLES API')
 })
