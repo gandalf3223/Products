@@ -1,12 +1,9 @@
 const {Sequelize} = require('sequelize');
+const dotenv = require('dotenv');
+dotenv.config();
+const URL = process.env.PG_URL
 
-
-// Option 3: Passing parameters separately (other dialects)
-// const sequelize = new Sequelize('products_db', 'vinhle', 'postgres', {
-//   host: 'localhost',
-//   dialect: 'postgres' /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
-// });
-const sequelize = new Sequelize('postgres://vinhle:postgres@localhost:5432/products_db');
+const sequelize = new Sequelize(URL);
 
 sequelize
   .authenticate()
@@ -16,8 +13,5 @@ sequelize
   .catch(err => {
     console.error('Unable to connect to the database:', err);
   });
-
-
-debugger;
 
 module.exports.sequelize = sequelize;
