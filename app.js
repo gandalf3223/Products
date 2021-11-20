@@ -7,12 +7,12 @@ const logger = require('pino')({
 
 //Sequelize models
 const {sequelize} = require('./db/index.js')
-const {Product, getProduct, getProductList} = require('./models/products.js')
-const {Style, getStylesList} = require('./models/styles.js')
-const {Feature, getFeatures} = require('./models/features.js')
-const {Photo, getPhotosList} = require('./models/photos.js')
-const {Sku, getSkusList} = require('./models/skus.js')
-const {Related} = require('./models/related.js')
+const {getProduct, getProductList} = require('./models/products.js')
+const {getStylesList} = require('./models/styles.js')
+const {getFeatures} = require('./models/features.js')
+const {getPhotosList} = require('./models/photos.js')
+const {getSkusList} = require('./models/skus.js')
+const {getRelatedProductsList} = require('./models/related.js')
 
 
 //middleware
@@ -132,5 +132,22 @@ app.get('/products/:productID/styles', (req, res) => {
   .catch( (error) => {
       logger.error(error)
       res.status(500).send('Error getting styles data')
+  })
+})
+
+
+/*
+API to retrieve specific List of Related products
+*/
+app.get('/products/:productID/related', (req, res) => {
+  let productID = req.params.productID;
+
+  getRelatedProductsList(productID)
+  .then( (relatedProductsList) => {
+    res.status(200).send(relatedProductsList)
+  })
+  .catch( (error) => {
+    logger.error(error)
+    res.status(500).send('Server not able retrieve records')
   })
 })
