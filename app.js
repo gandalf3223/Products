@@ -8,7 +8,7 @@ const logger = require('pino')({
 //Sequelize models
 const {sequelize} = require('./db/index.js')
 const {Product, getProduct, getProductList} = require('./models/products.js')
-const {Style} = require('./models/styles.js')
+const {Style, getStylesList} = require('./models/styles.js')
 const {Feature, getFeatures} = require('./models/features.js')
 const {Photo, getPhotosList} = require('./models/photos.js')
 const {Sku, getSkusList} = require('./models/skus.js')
@@ -102,28 +102,41 @@ Includes Phots list and Skus list
 app.get('/products/:productID/styles', (req, res) => {
 
   let productID = req.params.productID;
-  let testStyleID = 2 //Sample testing
+  let testStyleID =  //Sample testing
 
-
-  // Photo list for Styles API response
-  getPhotosList(testStyleID)
-  .then( (result) => {
-    logger.debug(result)
-  })
-  .catch( (error) => {
-    logger.error(error)
-  })
-
-
-  //Sku list for Styles API response
-  getSkusList(testStyleID)
+  getStylesList(productID)
   .then( (result) => {
     logger.info(result)
     res.status(200).send('STYLES API')
   })
   .catch( (error) => {
     logger.error(error)
+    res.status(500).send('Error getting styles data')
   })
+
+
+
+
+
+  // // Photo list for Styles API response
+  // getPhotosList(testStyleID)
+  // .then( (result) => {
+  //   logger.debug(result)
+  // })
+  // .catch( (error) => {
+  //   logger.error(error)
+  // })
+
+
+  // //Sku list for Styles API response
+  // getSkusList(testStyleID)
+  // .then( (result) => {
+  //   logger.info(result)
+  //   res.status(200).send('STYLES API')
+  // })
+  // .catch( (error) => {
+  //   logger.error(error)
+  // })
 
 
 

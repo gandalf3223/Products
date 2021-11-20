@@ -1,11 +1,14 @@
 //id,productId,name,sale_price,original_price,default_style
 const { Sequelize, DataTypes } = require('sequelize');
 const {sequelize} = require('../db/index.js')
+const logger = require('pino')(
+ { level: 'debug', }
+)
+
 
 const Style = sequelize.define('style', {
   id: {
-    type: Sequelize.INTEGER,  //Sequelize.UUID
-                              // UUID datatype for PostgreSQL and SQLite, CHAR(36) BINARY for MySQL (use defaultValue: Sequelize.UUIDV1 or Sequelize.UUIDV4 to make sequelize generate the ids automatically)
+    type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
@@ -28,4 +31,38 @@ const Style = sequelize.define('style', {
 }, { timestamps: false})
 
 
+const getStylesList = async function(productID) {
+
+
+  var count = 0;
+  let styleRecords = await Style.findAll({
+    where: {
+      productId: productID
+    }
+  })
+
+
+  if ( styleRecords === null ) {
+    logger.error(`Not able to find Style record from DB`)
+  } else {
+    logger.info(`Style records were found with productID: ${productID}`)
+
+    let  styleList = [];
+    for (let record of styleRecords) {
+
+      let styleItem = {
+        style_id: record.dataValues.id,
+        name: record.dataValues.name,
+        original_price: record.dataValues.original_price,
+        sale_price: record.dataValues.sale_price
+      }
+
+      styleList.push(styleItem)
+    }
+
+    return styleList;
+  }
+}
+
 module.exports.Style = Style;
+module.exports.getStylesList = getStylesList;
