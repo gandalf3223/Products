@@ -35,22 +35,22 @@ const getSkusList = async function(styleID) {
     logger.error('Sku records were not found in DB')
   } else {
     logger.info(`Found Sku records in DB`)
-    let skusList = [];
+    let skusList = {};
 
     for (let record of skuRecords) {
-      let skuItem = {
-        [record.dataValues.id ]:{
-          size: record.dataValues.size,
-          quantity : record.dataValues.quantity
-        }
+      skusList[record.dataValues.id ] =
+      {
+        size: record.dataValues.size,
+        quantity : record.dataValues.quantity,
       }
-
-      skusList.push(skuItem)
     }
-
     return skusList;
+
   }
+
+
 }
+
 
 
 module.exports.Sku = Sku;
