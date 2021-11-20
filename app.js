@@ -5,7 +5,7 @@ const logger = require('pino')({
   level: 'debug',
 })
 
-//Sequelize models
+//Sequelize model functions
 const {sequelize} = require('./db/index.js')
 const {getProduct, getProductList} = require('./models/products.js')
 const {getStylesList} = require('./models/styles.js')
@@ -15,18 +15,14 @@ const {getSkusList} = require('./models/skus.js')
 const {getRelatedProductsList} = require('./models/related.js')
 
 
-//middleware
+//Middleware
 app.use(express.json());
-
-// Feature.sync()
-
-app.get('/', (req, res) =>
-  res.send('Hello'))
 
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
+
 
 /*
 API to retrieve specific Product with Product ID
@@ -37,6 +33,7 @@ app.get('/products/:productID', (req, res) => {
 
   getProduct(productID)
   .then((result) => {
+
     //format Product data
     productData =
     {
@@ -48,23 +45,21 @@ app.get('/products/:productID', (req, res) => {
       "default_price": result.default_price.toString()
     }
 
-    getFeatures(productID)
-      .then( (result) => {
-      // logger.debug(result)
-      productData.features = result;
-      res.status(200).send(productData)
-    })
-    .catch((reject) => {
-    logger.error(`Get feature with productID error: ${reject}`)
-    res.sendStatus(500)
-    })
-
+    return getFeatures(productID)
+          .then( (result) => {
+            productData.features = result;
+            return productData;
+          })
+  })
+  .then((result) => {
+    res.status(200).send(result)
   })
   .catch((reject) => {
     logger.error(`Get Product info with productID error: ${reject}`)
     res.sendStatus(500)
   })
 })
+
 
 /*
 API to retrieve specific Products list,
@@ -94,6 +89,7 @@ app.get('/products/', (req, res) => {
 
   })
 })
+
 
 /*
 API to retrieve specific Styles list,
