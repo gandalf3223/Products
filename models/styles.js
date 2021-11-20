@@ -31,10 +31,8 @@ const Style = sequelize.define('style', {
 }, { timestamps: false})
 
 
-const getStylesList = async function(productID) {
+const getStylesList = async function(productID){
 
-
-  var count = 0;
   let styleRecords = await Style.findAll({
     where: {
       productId: productID

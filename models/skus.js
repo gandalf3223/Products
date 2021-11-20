@@ -45,10 +45,7 @@ const getSkusList = async function(styleID) {
       }
     }
     return skusList;
-
   }
-
-
 }
 
 

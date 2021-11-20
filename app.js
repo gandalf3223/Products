@@ -97,102 +97,40 @@ app.get('/products/', (req, res) => {
 
 /*
 API to retrieve specific Styles list,
-Includes Phots list and Skus list
+Includes Phots list and Skus list as property for styles
 */
 app.get('/products/:productID/styles', (req, res) => {
 
   let productID = req.params.productID;
-
-
   let  productStyles = {product_id: productID}
 
-
-
   getStylesList(productID)
-  .then( (result) => {
+  .then( (stylesList) => {
 
-    let promisesList = result.map( (style) =>
+    let promisesList = stylesList.map( (style) =>
      getPhotosList(style.style_id)
-
-     .then((result) =>  {
-       style.photo = result
+     .then((photosList) =>  {
+       style.photos = photosList
        return getSkusList(style.style_id)
       })
-
-      .then((result) => {
-        style.sku = result;
-        return style
+      .then((skusList) => {
+        style.sku = skusList;
+        return style;
       })
     )
 
-    Promise.all(promisesList)
-    .then((results) => {
-      // logger.debug(results)
-      productStyles.results = results
-      // return results//
-    })
-    //for each style, add skus and photos properties
-    // for(let style of result){
-    //   logger.debug(`${style.style_id}`)
-
-    //   getPhotosList(style.style_id)
-    //   .then( (result) => {
-    //     // logger.debug(`PHOTOS: ${result}`)
-    //     style.photos = result;
-    //     return getSkusList(style.style_id)
-    //   })
-    //   // .then(getSkusList(style.style_id))
-    //   .then( (result) => {
-    //     // logger.debug(`SKUS: ${result}`)
-    //     style.skus = result;
-    //     stylesList.push(style)
-    //   })
-
-    // }
-
+    return Promise.all(promisesList)
+           .then((results) => {
+             productStyles.results = results
+             return productStyles
+           })
   })
-  .then((x) => {
-    logger.debug(`${x}`)
-    logger.debug(`${stylesList}`)
-    res.status(200).send(stylesList)
+  .then((result) => {
+
+    res.status(200).send(result)
   })
   .catch( (error) => {
       logger.error(error)
       res.status(500).send('Error getting styles data')
   })
-
-  //   logger.info(stylesList)
-  //   res.status(200).send(stylesList)
-  // })
-  // .catch( (error) => {
-  //   logger.error(error)
-  //   res.status(500).send('Error getting styles data')
-  // })
-
-
-
-
-
-  // // Photo list for Styles API response
-  // getPhotosList(testStyleID)
-  // .then( (result) => {
-  //   logger.debug(result)
-  // })
-  // .catch( (error) => {
-  //   logger.error(error)
-  // })
-
-
-  // //Sku list for Styles API response
-  // getSkusList(testStyleID)
-  // .then( (result) => {
-  //   logger.info(result)
-  //   res.status(200).send('STYLES API')
-  // })
-  // .catch( (error) => {
-  //   logger.error(error)
-  // })
-
-
-
 })
