@@ -33,17 +33,7 @@ app.get('/products/:productID', (req, res) => {
 
   getProduct(productID)
   .then((result) => {
-
-    //format Product data
-    productData =
-    {
-      "id": result.id,
-      "name": result.name,
-      "slogan": result.slogan,
-      "description": result.description,
-      "category": result.category,
-      "default_price": result.default_price.toString()
-    }
+    productData = result
 
     return getFeatures(productID)
           .then( (result) => {
