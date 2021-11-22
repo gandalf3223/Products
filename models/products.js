@@ -30,7 +30,7 @@ const Product = sequelize.define('product', {
 //function for getting record from DB
 const getProduct = async function(productID) {
 
-  const product = await Product.findByPk(123);
+  const product = await Product.findByPk(productID);
   if (product === null) {
     console.log(`${productID} not found in DB`)
   } else {

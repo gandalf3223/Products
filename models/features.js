@@ -35,10 +35,11 @@ const getFeatures = async function(productID){
     logger.error(featureRecords)
   } else {
     let featureList = []
-    for (let featureItem of featureRecords) {
+
+    for (let record of featureRecords) {
       let featureInfoItem = {
-        feature: featureItem.dataValues.feature,
-        value: featureItem.dataValues.value
+        feature: record.dataValues.feature,
+        value: record.dataValues.value
       }
       featureList.push(featureInfoItem)
     }

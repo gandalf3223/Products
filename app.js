@@ -5,28 +5,24 @@ const logger = require('pino')({
   level: 'debug',
 })
 
-//Sequelize models
+//Sequelize model functions
 const {sequelize} = require('./db/index.js')
-const {Product, getProduct, getProductList} = require('./models/products.js')
-const {Style} = require('./models/styles.js')
-const {Feature, getFeatures} = require('./models/features.js')
-const {Photo, getPhotosList} = require('./models/photos.js')
-const {Sku, getSkusList} = require('./models/skus.js')
-const {Related} = require('./models/related.js')
+const {getProduct, getProductList} = require('./models/products.js')
+const {getStylesList} = require('./models/styles.js')
+const {getFeatures} = require('./models/features.js')
+const {getPhotosList} = require('./models/photos.js')
+const {getSkusList} = require('./models/skus.js')
+const {getRelatedProductsList} = require('./models/related.js')
 
 
-//middleware
+//Middleware
 app.use(express.json());
-
-// Feature.sync()
-
-app.get('/', (req, res) =>
-  res.send('Hello'))
 
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
+
 
 /*
 API to retrieve specific Product with Product ID
@@ -37,6 +33,7 @@ app.get('/products/:productID', (req, res) => {
 
   getProduct(productID)
   .then((result) => {
+
     //format Product data
     productData =
     {
@@ -48,23 +45,21 @@ app.get('/products/:productID', (req, res) => {
       "default_price": result.default_price.toString()
     }
 
-    getFeatures(productID)
-      .then( (result) => {
-      // logger.debug(result)
-      productData.features = result;
-      res.status(200).send(productData)
-    })
-    .catch((reject) => {
-    logger.error(`Get feature with productID error: ${reject}`)
-    res.sendStatus(500)
-    })
-
+    return getFeatures(productID)
+          .then( (result) => {
+            productData.features = result;
+            return productData;
+          })
+  })
+  .then((result) => {
+    res.status(200).send(result)
   })
   .catch((reject) => {
     logger.error(`Get Product info with productID error: ${reject}`)
     res.sendStatus(500)
   })
 })
+
 
 /*
 API to retrieve specific Products list,
@@ -95,36 +90,60 @@ app.get('/products/', (req, res) => {
   })
 })
 
+
 /*
 API to retrieve specific Styles list,
-Includes Phots list and Skus list
+Includes Phots list and Skus list as property for styles
 */
 app.get('/products/:productID/styles', (req, res) => {
 
   let productID = req.params.productID;
-  let testStyleID = 2 //Sample testing
+  let  productStyles = {product_id: productID}
+
+  getStylesList(productID)
+  .then( (stylesList) => {
+
+    let promisesList = stylesList.map( (style) =>
+     getPhotosList(style.style_id)
+     .then((photosList) =>  {
+       style.photos = photosList
+       return getSkusList(style.style_id)
+      })
+      .then((skusList) => {
+        style.sku = skusList;
+        return style;
+      })
+    )
+
+    return Promise.all(promisesList)
+           .then((results) => {
+             productStyles.results = results
+             return productStyles
+           })
+  })
+  .then((result) => {
+
+    res.status(200).send(result)
+  })
+  .catch( (error) => {
+      logger.error(error)
+      res.status(500).send('Error getting styles data')
+  })
+})
 
 
-  // Photo list for Styles API response
-  getPhotosList(testStyleID)
-  .then( (result) => {
-    logger.debug(result)
+/*
+API to retrieve specific List of Related products
+*/
+app.get('/products/:productID/related', (req, res) => {
+  let productID = req.params.productID;
+
+  getRelatedProductsList(productID)
+  .then( (relatedProductsList) => {
+    res.status(200).send(relatedProductsList)
   })
   .catch( (error) => {
     logger.error(error)
+    res.status(500).send('Server not able retrieve records')
   })
-
-
-  //Sku list for Styles API response
-  getSkusList(testStyleID)
-  .then( (result) => {
-    logger.info(result)
-    res.status(200).send('STYLES API')
-  })
-  .catch( (error) => {
-    logger.error(error)
-  })
-
-
-
 })
