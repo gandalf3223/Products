@@ -1,3 +1,4 @@
+const newrelic = require('newrelic')
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -16,6 +17,9 @@ const {getRelatedProductsList} = require('./models/related.js')
 
 
 //Middleware
+const path = require('path')
+console.log('------------------------------', path.join(__dirname, 'public'))
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.json());
 
 
