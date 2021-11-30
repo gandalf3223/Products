@@ -19,7 +19,7 @@ const {getRelatedProductsList} = require('./models/related.js')
 app.use(express.json());
 
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
@@ -33,22 +33,15 @@ app.get('/products/:productID', (req, res) => {
 
   getProduct(productID)
   .then((result) => {
-
-    //format Product data
-    productData =
-    {
-      "id": result.id,
-      "name": result.name,
-      "slogan": result.slogan,
-      "description": result.description,
-      "category": result.category,
-      "default_price": result.default_price.toString()
-    }
+    productData = result
 
     return getFeatures(productID)
           .then( (result) => {
             productData.features = result;
             return productData;
+          })
+          .catch( (error) => {
+            logger.error(error);
           })
   })
   .then((result) => {
@@ -147,3 +140,7 @@ app.get('/products/:productID/related', (req, res) => {
     res.status(500).send('Server not able retrieve records')
   })
 })
+
+//Exporting for Endpoint testing
+module.exports.app = app;
+module.exports.server = server;

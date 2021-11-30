@@ -30,13 +30,21 @@ const Product = sequelize.define('product', {
 //function for getting record from DB
 const getProduct = async function(productID) {
 
-  const product = await Product.findByPk(productID);
-  if (product === null) {
+  const productRecord = await Product.findByPk(productID);
+  if (productRecord === null) {
     console.log(`${productID} not found in DB`)
   } else {
-    console.log(product instanceof Product);
-    console.log(product.name, 'was found')
-    return product;
+    console.log(productRecord instanceof Product);
+    console.log(productRecord.name, 'was found')
+
+    return {
+      "id": productRecord.id,
+      "name": productRecord.name,
+      "slogan": productRecord.slogan,
+      "description": productRecord.description,
+      "category": productRecord.category,
+      "default_price": productRecord.default_price.toString()
+    }
   }
 }
 
