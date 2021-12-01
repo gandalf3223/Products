@@ -1,15 +1,15 @@
 const {Sequelize} = require('sequelize');
-const dotenv = require('dotenv');
-dotenv.config();
-const URL = process.env.PG_URL
+const config = require('../config.js')
 
-const sequelize = new Sequelize(URL);
+if (!config) {
+  console.log('Missing config.js file')
+}
+
+const sequelize = new Sequelize(config.URL);
 
 sequelize.authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
-
-
     sequelize.sync();
   })
   .catch(err => {
