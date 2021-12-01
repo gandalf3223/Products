@@ -23,7 +23,7 @@ app.use(express.json());
 
 
 const server = app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Products API server listening at http://localhost:${port}`)
 })
 
 

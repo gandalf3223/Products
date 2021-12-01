@@ -9,7 +9,7 @@ const sequelize = new Sequelize(config.URL);
 
 sequelize.authenticate()
   .then(() => {
-    console.log('Connection has been established successfully.');
+    console.log(`SUCCESS: Connection to ${config.db_name} database at ${config.postgres_ip} established! \n`);
     sequelize.sync();
   })
   .catch(err => {
