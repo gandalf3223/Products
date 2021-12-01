@@ -1,4 +1,3 @@
-const newrelic = require('newrelic')
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -24,7 +23,7 @@ app.use(express.json());
 
 
 const server = app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Products API server listening at http://localhost:${port}`)
 })
 
 
