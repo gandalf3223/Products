@@ -24,7 +24,6 @@ const Sku = sequelize.define('sku', {
 
 
 const getSkusList = async function(styleID) {
-  logger.info(styleID)
   let skuRecords = await Sku.findAll({
     where: {
       styleId: styleID
