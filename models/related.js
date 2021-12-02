@@ -32,7 +32,7 @@ const getRelatedProductsList = async function(productID) {
   if (relatedProductRecords ===  null) {
     logger.error('Not able to find Related products record from DB')
   } else {
-    logger.info(`Found relatedProduct records in DB`)
+    // logger.info(`Found relatedProduct records in DB`)
 
     let relatedProductsList = [];
     for (let record of relatedProductRecords){
