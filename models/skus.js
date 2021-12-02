@@ -34,7 +34,7 @@ const getSkusList = async function(styleID) {
   if (skuRecords === null) {
     logger.error('Sku records were not found in DB')
   } else {
-    logger.info(`Found Sku records in DB`)
+    // logger.info(`Found Sku records in DB`)
     let skusList = {};
 
     for (let record of skuRecords) {

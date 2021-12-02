@@ -34,8 +34,8 @@ const getProduct = async function(productID) {
   if (productRecord === null) {
     console.log(`${productID} not found in DB`)
   } else {
-    console.log(productRecord instanceof Product);
-    console.log(productRecord.name, 'was found')
+    // console.log(productRecord instanceof Product);
+    // console.log(productRecord.name, 'was found')
 
     return {
       "id": productRecord.id,

@@ -43,7 +43,7 @@ const getFeatures = async function(productID){
       }
       featureList.push(featureInfoItem)
     }
-    logger.info(`Successfully retrieved Feature info from DB`)
+    // logger.info(`Successfully retrieved Feature info from DB`)
     return featureList;
   }
 }

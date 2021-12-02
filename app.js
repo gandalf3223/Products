@@ -78,7 +78,6 @@ app.get('/products/', (req, res) => {
 
   getProductList(page, count)
   .then( (result) => {
-    console.log('ProductList', result)
     res.status(200).send(result)
   })
   .catch( (error) => {

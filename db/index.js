@@ -5,7 +5,10 @@ if (!config) {
   console.log('Missing config.js file')
 }
 
-const sequelize = new Sequelize(config.URL);
+const sequelize = new Sequelize(config.URL, {
+  //  // disable logging; default: console.log
+  logging: false,
+});
 
 sequelize.authenticate()
   .then(() => {

@@ -43,7 +43,7 @@ const getStylesList = async function(productID){
   if ( styleRecords === null ) {
     logger.error(`Not able to find Style record from DB`)
   } else {
-    logger.info(`Style records were found with productID: ${productID}`)
+    // logger.info(`Style records were found with productID: ${productID}`)
 
     let  styleList = [];
     for (let record of styleRecords) {

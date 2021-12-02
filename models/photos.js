@@ -33,7 +33,7 @@ const getPhotosList = async function(styleID){
   if (photoRecords === null) {
     logger.error('Did not find Photo records in DB')
   } else {
-    logger.info(`Found Photo records in DB`)
+    // logger.info(`Found Photo records in DB`)
 
     let photosList = [];
     for (let record of photoRecords) {

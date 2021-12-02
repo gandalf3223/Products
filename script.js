@@ -1,11 +1,6 @@
 import http from 'k6/http';
 import { sleep } from 'k6';
 
-// export default function () {
-//   http.get('https://test.k6.io');
-//   sleep(1);
-// }
-
 
 /*
 "k6 run --vus 1000 --iterations 10000 script.js"
@@ -14,24 +9,26 @@ and would run this single requests 10 times for each virtual user, hence 10,000 
 */
 
 
-// export const options = {
-//   stages: [
-//     { duration: '3m', target: 100 }, // stay at 100 users for 10 minutes
-//   ],
-// };
-
 export const options = {
-vus: 1000, // stay at 100 users for 10 minutes
-duration: '5m',
-
+  discardResponseBodies: true,
+  scenarios: {
+    contacts: {
+      executor: 'constant-arrival-rate',
+      rate: 1000, // x RPS, since timeUnit is the default 1s
+      duration: '30s',
+      preAllocatedVUs: 1000,
+      maxVUs: 1000,
+    },
+  },
 };
 
-//Load test for '/Product/:productID'
+
+//Load test
 export default function() {
   // const url = 'http://localhost:3000/products/1/styles'
-  // const url = 'http://localhost:3000/products/1/'
+  const url = 'http://localhost:3000/products/1/'
   // const url = 'http://localhost:3000/products/'
-  const url = 'http://localhost:3000/products/1/related'
+  // const url = 'http://localhost:3000/products/1/related'
 
   const payload = {};
   const params = {
