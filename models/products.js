@@ -54,7 +54,6 @@ const getProductList = async function(page, count) {
 
   //Provides the first index of the page, depends on size of count.
   let start = ((page - 1) * count) //which first index of 'page' to start
-  console.log(start)
 
   const productRecords = await Product.findAll({
       offset: start,  //Skip up till this point
