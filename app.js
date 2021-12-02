@@ -4,6 +4,7 @@ const port = 3000;
 const logger = require('pino')({
   level: 'debug',
 })
+const fs = require('fs')
 
 //Sequelize model functions
 const {sequelize} = require('./db/index.js')
@@ -143,6 +144,15 @@ app.get('/products/:productID/related', (req, res) => {
     res.status(500).send('Server not able retrieve records')
   })
 })
+
+
+/*
+Endpoint for verification of loader.io
+*/
+app.use('/loaderio-da37b2e9185d59ee16c468a916e6bac7/', (req, res) => {
+  const loaderIOfile = fs.readFileSync('./loaderio-da37b2e9185d59ee16c468a916e6bac7.txt', 'utf-8');
+  res.send(loaderIOfile);
+});
 
 //Exporting for Endpoint testing
 module.exports.app = app;
